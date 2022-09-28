@@ -11,7 +11,7 @@ from winotify import Notification, audio
 # application id for the notification
 APP_ID = "Power Alert!"
 # absolute path of the icon
-ICON_PATH = r"C:\path\icon.png"
+ICON_PATH = r"C:\Users\YONI\Documents\Projects\My Projects\battery\icon.png"
 # the minute difference between 'Lights OFF' reminders
 TIME_DELTA = datetime.timedelta(minutes=5)
 
@@ -56,15 +56,17 @@ while True:
     # check if lights are still OFF
     if not current_battery_status and not previous_battery_status:
         # this works only if 'Lights OFF!' toast is shown first/ before
+        print(prev_notification_time)
         if prev_notification_time is not None:
             now = datetime.datetime.now()
             time_gap = now - prev_notification_time
             # check if the minute difference is >= 5
             # if yes, show reminder toast
+            print(time_gap, TIME_DELTA)
             if time_gap >= TIME_DELTA:
                 reminder_toast = reminderToast()
                 reminder_toast.show()
-
+                # set 'prev_notification_time' to 'now' after showing the toast
                 prev_notification_time = now
 
     # check if battery status changed
