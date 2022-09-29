@@ -13,7 +13,9 @@ APP_ID = "Power Alert!"
 # absolute path of the icon
 ICON_PATH = r"C:\Users\YONI\Documents\Projects\My Projects\battery\icon.png"
 # the minute difference between 'Lights OFF' reminders
-TIME_DELTA = datetime.timedelta(minutes=5)
+TIME_DELTA = datetime.timedelta(minutes=4, seconds=50)
+# time to sleep
+SLEEP_TIME = 15
 
 # function to create a toast object based on current battery status
 def createToast(battery_status):
@@ -60,7 +62,7 @@ while True:
         if prev_notification_time is not None:
             now = datetime.datetime.now()
             time_gap = now - prev_notification_time
-            # check if the minute difference is >= 5
+            # check if the minute difference is >= 00:04:50
             # if yes, show reminder toast
             print(time_gap, TIME_DELTA)
             if time_gap >= TIME_DELTA:
@@ -83,6 +85,6 @@ while True:
     # update the 'previous_battery_status' with the 'current_battery_status'
     previous_battery_status = current_battery_status
 
-    # 30 seconds delay
-    time.sleep(30)
+    # 15 seconds delay
+    time.sleep(SLEEP_TIME)
     print("watching for battery status change")
