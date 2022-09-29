@@ -18,7 +18,7 @@ TIME_DELTA = datetime.timedelta(minutes=4, seconds=50)
 SLEEP_TIME = 15
 
 # function to create a toast object based on current battery status
-def createToast(battery_status):
+def showStatusChangeToast(battery_status):
     battery = psutil.sensors_battery()
 
     toast = Notification(
@@ -29,10 +29,10 @@ def createToast(battery_status):
     )
 
     toast.set_audio(audio.Default, loop=False)
-    return toast
+    toast.show()
 
 # function to create a reminder toast object
-def reminderToast():
+def showReminderToast():
     battery = psutil.sensors_battery()
 
     toast = Notification(
@@ -43,7 +43,7 @@ def reminderToast():
     )
 
     toast.set_audio(audio.Default, loop=False)
-    return toast
+    toast.show()
 
 # previous battery status. used to compare with the current battery status
 previous_battery_status = psutil.sensors_battery().power_plugged
@@ -62,12 +62,13 @@ while True:
         if prev_notification_time is not None:
             now = datetime.datetime.now()
             time_gap = now - prev_notification_time
-            # check if the minute difference is >= 00:04:50
+            # check if the minute difference is >= 5
             # if yes, show reminder toast
             print(time_gap, TIME_DELTA)
             if time_gap >= TIME_DELTA:
-                reminder_toast = reminderToast()
-                reminder_toast.show()
+                
+                showReminderToast()
+
                 # set 'prev_notification_time' to 'now' after showing the toast
                 prev_notification_time = now
 
@@ -75,8 +76,7 @@ while True:
     # if yes, show status update toast
     if previous_battery_status != current_battery_status:
 
-        toast = createToast(current_battery_status)
-        toast.show()
+        showStatusChangeToast(current_battery_status)
 
         # if the new status is 'Lights OFF!', set 'previous_battery_status' to the current time
         if not current_battery_status:
